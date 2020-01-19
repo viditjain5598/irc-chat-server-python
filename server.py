@@ -30,3 +30,17 @@ def recv_msg(client_socket):
         return False
 
 
+while True:
+    read_sockets, _, exception_sockets = select.select(sockets_list, [], sockets_list)
+
+    for notified_socket in read_sockets:
+        if  notified_socket == server_socket:
+            client_socket, client_address = server_socket.accept()
+        else:
+            msg = recv_msg(notified_socket)
+
+    for notified_socket in exception_sockets:
+        
+        sockets_list.remove(notified_socket)
+        del clients[notified_socket]
+
