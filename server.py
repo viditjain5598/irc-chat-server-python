@@ -36,6 +36,12 @@ while True:
     for notified_socket in read_sockets:
         if  notified_socket == server_socket:
             client_socket, client_address = server_socket.accept()
+            user = recv_msg(client_socket)
+            if user is False:
+                continue
+            sockets_list.append(client_socket)
+            clients[client_socket] = user
+            print('Accepted')
         else:
             msg = recv_msg(notified_socket)
 
