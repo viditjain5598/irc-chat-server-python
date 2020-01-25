@@ -41,9 +41,21 @@ while True:
                 continue
             sockets_list.append(client_socket)
             clients[client_socket] = user
-            print('Accepted')
+            print(f'Accepted connection from {user} at address {client_address}')
         else:
             msg = recv_msg(notified_socket)
+            
+            if msg is False:
+                sockets_list.remove(notified_socket)
+                del clients[notified_socket]
+                continue
+
+            user = clients[notified_socket]
+            print(f"recieved message from {user["data"]} : {msg["data"]}")
+            for client_socket in sockets_list:
+                if client_socket != notified_socket:
+                    client_socket.send("".join((user["header"], user["data"], msg["header"], msg["data"])))
+
 
     for notified_socket in exception_sockets:
         
